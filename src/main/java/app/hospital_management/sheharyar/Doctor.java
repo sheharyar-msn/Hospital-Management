@@ -1,5 +1,7 @@
 package app.hospital_management.sheharyar;
 
+import java.util.Scanner;
+
 public class Doctor extends Person{
     static int totalNumOfDoctors;
     private int doctorID = 26000;
@@ -14,5 +16,6 @@ public class Doctor extends Person{
         this.doctorID += id;
     }
 
+    
     
 }

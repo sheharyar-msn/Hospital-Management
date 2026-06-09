@@ -9,6 +9,36 @@ import java.io.FileWriter;
 
 public class FileManager {
 
+    //universal Login details verifier
+    public static Boolean check_login_details(String userID, String password, String fileName){
+        try {
+            BufferedReader readFile = new BufferedReader(new FileReader(fileName));
+            String line;
+            while ((line = readFile.readLine()) != null) {
+                if (line.isEmpty()) {
+                    continue;
+                }
+
+                String lines[] = line.split(",", 5);
+                String usernameInFile = lines[0];
+                String passwordInFile = lines[1];
+
+                if(usernameInFile.equals(userID) && passwordInFile.equals(password)){
+                    readFile.close();
+                    return true;
+                }
+            }
+            readFile.close();
+
+        } catch (FileNotFoundException FileNotFoundException) {
+                System.out.println("No User Found");
+        }catch (Exception e){
+            System.out.println("Error: "+e);
+        }
+        return false;
+    }
+
+
     //Find and Delete from txt
     static void find_and_delete(int IDtoRemove,String fileName){
 

@@ -4,44 +4,6 @@ import java.util.Scanner;
 
 
 public class Main {
-
-    public static void docter(Scanner sc){
-
-        String username ="";
-        String password ="";
-        boolean loged_in = false;
-
-        while (!loged_in) {
-            System.out.println("\n=======================");
-
-            try {
-                System.out.print("Enter User Name: ");
-                username = sc.next();
-
-                System.out.print("Enter Password: ");
-                password = sc.next();
-                
-                
-            } catch (Exception e) {
-                System.out.println("Invalid Input");
-            }
-            //make method for Doctor login credentionals verification
-            if(FileManager.check_login_details_admin(username,password)){
-                loged_in = true;
-            }
-        }
-
-        if(!loged_in){
-            
-            return;
-        }
-
-    }
-
-    public static void receptionist(Scanner sc){
-
-    }
-
     
 
     public static void main(String[] args) {
@@ -66,11 +28,11 @@ public class Main {
 
         switch (user_in) {
             case 1:
-                docter(sc);
+                Doctor.doctor_login_interface(sc);
                 break;
             
             case 2:
-                receptionist(sc);
+
                 break;
             case 3:
                 admin.admin_login_interface(sc);

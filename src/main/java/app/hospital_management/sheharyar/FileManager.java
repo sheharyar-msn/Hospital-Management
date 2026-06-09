@@ -9,6 +9,64 @@ import java.io.FileWriter;
 
 public class FileManager {
 
+    public static void updateHistory(int patientId, String newHistory){
+        try {
+            BufferedReader fileReader = new BufferedReader(new FileReader("Patients.txt"));
+            BufferedWriter fileWritter = new BufferedWriter(new FileWriter("Patients.txt",true));
+            String line;
+
+            while ((line = fileReader.readLine()) != null) {
+
+                //Format of each Patient in file "ID,Name,History,Bill,CNIC,Phone Number,DoctorID "
+                String lines[] = line.split(",", 7);
+
+                //Finding and printing Patient for given Doctor.
+                if(patientId == Integer.parseInt(lines[0])){
+                    //Writing new History while keeping the same old info.
+                    fileWritter.write(lines[0]+','+lines[1]+','+newHistory+','+lines[3]+','+lines[4]+','+lines[5]+','+lines[6]);
+                    fileWritter.newLine();
+                }
+            }
+
+            fileWritter.close();
+            fileReader.close();
+
+        } catch (FileNotFoundException FileNotFoundException) {
+                System.out.println("Patients Not available");                
+        }catch (Exception e){
+            System.out.println("Error: "+e);
+        }
+
+    }
+
+    //Function for displaying all patients of a given Doctor.
+    public static void printAllpatients(int doctorID){
+        System.out.println("\nID \tName \tContect \tHistory");
+        try {
+            BufferedReader fileReader = new BufferedReader(new FileReader("Patients.txt"));
+            String line;
+
+            while ((line = fileReader.readLine()) != null) {
+
+                //Format of each Patient in file "ID,Name,History,Bill,CNIC,Phone Number,DoctorID "
+                String lines[] = line.split(",", 7);
+
+                //Finding and printing Patient for given Doctor.
+                if(doctorID == Integer.parseInt(lines[6])){
+                    System.out.println(lines[0]+"\t"+lines[1]+"\t"+lines[5]+"\t"+lines[2]);
+                }
+            }
+
+            fileReader.close();
+
+        } catch (FileNotFoundException FileNotFoundException) {
+                System.out.println("Patients Not available");                
+        }catch (Exception e){
+            System.out.println("Error: "+e);
+        }
+
+    }
+
     //universal Login details verifier
     public static Boolean check_login_details(String userID, String password, String fileName){
         try {
@@ -24,6 +82,7 @@ public class FileManager {
                 String passwordInFile = lines[1];
 
                 if(usernameInFile.equals(userID) && passwordInFile.equals(password)){
+                    System.out.println("Sending Verified from file manager");
                     readFile.close();
                     return true;
                 }
@@ -138,9 +197,15 @@ public class FileManager {
     static void saveDoctorDetailsToFile(Doctor newDoctor){
         File doctors = new File("Doctors.txt");
         
+            
         if (!doctors.exists()){
             try{
                 doctors.createNewFile();
+
+                BufferedWriter writter = new BufferedWriter(new FileWriter("Doctors.txt",true));
+                //Format of each doctor in file "ID,Passowrd,Name,CNIC,Phone Number"
+                writter.write("ID,Passowrd,Name,CNIC,Phone Number");
+                writter.newLine();
             }catch(Exception e){
                 System.out.println("Unable to create .txt file for Doctors");
                 return;

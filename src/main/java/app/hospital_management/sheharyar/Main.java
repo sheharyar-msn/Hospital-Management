@@ -2,12 +2,13 @@ package app.hospital_management.sheharyar;
 
 import java.util.Scanner;
 
+
 public class Main {
 
     public static void docter(Scanner sc){
 
-        String username;
-        String password;
+        String username ="";
+        String password ="";
         boolean loged_in = false;
 
         while (!loged_in) {
@@ -24,10 +25,16 @@ public class Main {
             } catch (Exception e) {
                 System.out.println("Invalid Input");
             }
-
-            //To:Do add condition to check password then precead..
+            //make method for Doctor login credentionals verification
+            if(FileManager.check_login_details_admin(username,password)){
+                loged_in = true;
+            }
         }
-        
+
+        if(!loged_in){
+            
+            return;
+        }
 
     }
 
@@ -35,10 +42,7 @@ public class Main {
 
     }
 
-    public static void admin(Scanner sc){
-
-    }
-
+    
 
     public static void main(String[] args) {
 
@@ -69,9 +73,12 @@ public class Main {
                 receptionist(sc);
                 break;
             case 3:
-                admin(sc);
+                admin.admin_login_interface(sc);
                 break;
         }
+
+        System.out.println("\nExiting Program..\n");
+        return;
 
 
     }

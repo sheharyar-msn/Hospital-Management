@@ -10,6 +10,7 @@ public class Doctor extends Person{
         return this.doctorID;
     }
     void set_docterId(int id){
+        this.doctorID = 26000;
         this.doctorID += id;
     }
 

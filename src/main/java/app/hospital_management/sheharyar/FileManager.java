@@ -53,7 +53,7 @@ public class FileManager {
 
     }
 
-    //View list of Doctors
+    //View list of Members
     public static void printAll(String fileName){
         System.out.println("\nID\tName\tCNIC\tContect");
         try {
@@ -76,6 +76,32 @@ public class FileManager {
             System.out.println("Error: "+e);
         }
 
+    }
+
+    //Save Receptionist Details to File
+    static void saveReceptionistDetailsToFile(Receptionist newReceptionist){
+        File receptionists = new File("Receptionists.txt");
+        
+        if (!receptionists.exists()){
+            try{
+                receptionists.createNewFile();
+            }catch(Exception e){
+                System.out.println("Unable to create .txt file for Receptionists");
+                return;
+            }
+        }
+
+        //Writing New Doctor details txt file In "ID,Passowrd,Name,CNIC,Phone Number"
+        try {
+            BufferedWriter writter = new BufferedWriter(new FileWriter("Receptionists.txt",true));
+            writter.write(newReceptionist.get_receptionistId()+","+newReceptionist.get_password()+","+newReceptionist.get_name()+","+newReceptionist.get_cnic()+","+newReceptionist.get_phonenumber());
+            writter.newLine();
+            writter.close();
+
+        } catch (Exception e) {
+            System.out.println("Error occured while saving Rceptionist details.");
+        }
+        System.out.println("Successfully Saved. ");
     }
 
     //Save Doctor Details to File

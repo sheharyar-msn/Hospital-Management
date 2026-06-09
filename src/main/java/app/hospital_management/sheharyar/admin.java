@@ -1,8 +1,5 @@
 package app.hospital_management.sheharyar;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -10,31 +7,120 @@ import java.util.Scanner;
 
 public class admin {
 
-    private void find_and_delete(int doctorToDelete){
-        try {
-            BufferedReader read_doctors = new BufferedReader(new FileReader("Doctors.txt"));
-            String line;
-            while ((line = read_doctors.readLine()) != null) {
-                if (line.isEmpty()) {
-                    continue;
-                }
+    //function for deleting a receptionist
+    static void remove_receptionist(Scanner sc){
+        int input=1;
 
-                //Format of each doctor in file "ID,Passowrd,Name,CNIC,Phone Number"
-                
+        while(input !=0){
+            try{
+                sc.nextLine();
+                System.out.println("\n========Remove Receptionist========");
+                FileManager.printAll("Receptionists.txt");
+                System.out.print("\nEnter '0' to Exit OR Enter ID of the Doctor To Delete: ");
 
-                
+                input = sc.nextInt();
+                FileManager.find_and_delete(input, "Receptionists.txt");
+
+            }catch (InputMismatchException inputmissMatch){
+                System.out.println("Please Enter a Numerical Value.");
             }
-
-            read_doctors.close();
-
-        } catch (FileNotFoundException FileNotFoundException) {
-                System.out.println("Doctors Not available");                
-        }catch (Exception e){
-            System.out.println("Error: "+e);
         }
     }
 
+    // Function for registering new Receptionist
+    static void add_Receptionist(Scanner sc){
 
+        Receptionist toAddReceptionist = new Receptionist();
+        String temp;
+        sc.nextLine();
+
+        try {
+            System.out.println("\n========Adding Receptionists========");
+            System.out.println("Enter Receptionists Info\n");
+            System.out.print("Name: ");
+            sc.reset();
+            temp = sc.nextLine();
+            toAddReceptionist.set_name(temp);
+
+            System.out.print("CNIC NO: ");
+            toAddReceptionist.set_cnic(sc.nextLong());
+
+            System.out.print("Phone Number: ");
+            toAddReceptionist.set_phonenumber(sc.nextLong());
+
+            System.out.print("Enter Receptionists Id (100-999): 36");
+            int tempReceptionistID = sc.nextInt();
+            
+            //Verifying Given ID is Valid.
+            if(tempReceptionistID<1000 && tempReceptionistID>99){
+                toAddReceptionist.set_receptionistId(tempReceptionistID);
+            }else{
+                System.out.println("Inalid Doctor ID");
+                System.out.print("Enter receptionist Id (100-999): 36");
+                tempReceptionistID = sc.nextInt();
+                if(tempReceptionistID<1000 && tempReceptionistID>99){
+                    toAddReceptionist.set_receptionistId(tempReceptionistID);
+                }else return;
+                
+            }
+            
+            System.out.print("Enter Password For given Receptionist: ");
+            toAddReceptionist.set_password(sc.next());
+
+            System.out.print("\nAre You sure given information is correct? (y/n) ");
+            char input = sc.next().toUpperCase().charAt(0);
+            
+        
+            if(input == 'Y'){
+                System.out.println("Saving...");
+                FileManager.saveReceptionistDetailsToFile(toAddReceptionist);
+                return;
+            }
+
+            return;
+        } catch (InputMismatchException mismtach) {
+            System.out.println("Invalid input enter numerical Value");
+        }
+        
+    }
+
+    //Menu for receptionist Management
+    public static void receptionist_management(Scanner sc){
+        int adminChoice =0;
+
+        while (adminChoice!=3) {
+            //Flushing \n stuck
+            sc.nextLine();
+            System.out.println("\n========Receptionist Menu========");
+            System.out.println("1. Add Receptionist \n2. Remove Receptionist \n0. Exit");
+
+            try {
+                adminChoice = sc.nextInt();
+            } catch (InputMismatchException missmatch) {
+                System.out.println("Please Enter numerical value eg: 0 | 1 | 2 ");
+                continue;
+            }
+
+            
+            switch (adminChoice) {
+                case 0:
+                    return;
+                case 1:
+                    add_Receptionist(sc);
+                    continue;
+                case 2:
+                    remove_receptionist(sc);
+                    continue;
+            
+                default:
+                    System.out.println("Invalid Choice");
+                    continue;
+            }
+
+        }
+    }
+
+    //Function for Deleting a Doctor
     static void remove_doctors(Scanner sc){
         int input=1;
 
@@ -54,7 +140,8 @@ public class admin {
         }
     }
 
-    public static void add_doctor(Scanner sc){
+    //Function for Registering a new Doctor
+    static void add_doctor(Scanner sc){
 
         Doctor toAddDocter = new Doctor();
         String temp;
@@ -120,7 +207,7 @@ public class admin {
             try {
                 adminChoice = sc.nextInt();
             } catch (InputMismatchException missmatch) {
-                System.out.println("Please Enter numerical value eg: 1 | 2 | 3 ");
+                System.out.println("Please Enter numerical value eg: 0 | 1 | 2 ");
                 continue;
             }
 
@@ -164,7 +251,9 @@ public class admin {
                 case 1:
                     doctor_management(sc);
                     continue;
-            
+                case 2:
+                    receptionist_management(sc);
+                    continue;
                 default:
                     System.out.println("Invalid Choice");
                     continue;
@@ -173,7 +262,6 @@ public class admin {
         }
 
     }
-
 
     //Login Page for Admin
     public static void admin_login_interface(Scanner sc){

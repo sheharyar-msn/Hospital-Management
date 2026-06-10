@@ -34,7 +34,8 @@ public class Doctor extends Person{
                 if(userInput == 0){
                     return;
                 }else{
-                    System.out.print("Enter New Hisoty");
+                    sc.nextLine();
+                    System.out.print("Enter New Hisoty: ");
                     String newHistory = sc.nextLine();
                     FileManager.updateHistory(userInput, newHistory);
                 }

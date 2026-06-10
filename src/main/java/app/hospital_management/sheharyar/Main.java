@@ -32,7 +32,7 @@ public class Main {
                 break;
             
             case 2:
-
+                Receptionist.receptionist_login_interface(sc);
                 break;
             case 3:
                 admin.admin_login_interface(sc);

@@ -9,10 +9,42 @@ import java.io.FileWriter;
 
 public class FileManager {
 
+    static void savePatientDetailsToFile(Patient newPatient){
+        File patients = new File("Patients.txt");
+        
+            
+        if (!patients.exists()){
+            try{
+                patients.createNewFile();
+
+            }catch(Exception e){
+                System.out.println("Unable to create .txt file for Doctors");
+                return;
+            }
+        }
+
+        //Writing New Patient details txt file In "ID,Name,History,Bill,CNIC,Phone Number,DoctorID"
+        try {
+            BufferedWriter writter = new BufferedWriter(new FileWriter("Patients.txt",true));
+
+            writter.write(newPatient.get_patientId()+","+newPatient.get_name()+","+newPatient.history+","+newPatient.bill+","+newPatient.get_cnic()+","+newPatient.get_phonenumber()+","+newPatient.doctorID);
+
+            writter.newLine();
+            writter.close();
+
+        } catch (Exception e) {
+            System.out.println("Error occured while saving doctor details.");
+        }
+        System.out.println("Successfully Saved. ");
+    }
+
     public static void updateHistory(int patientId, String newHistory){
         try {
+            File inputFile = new File("Patients.txt");
+            File tempFile = new File("myTempFile.txt");
+
             BufferedReader fileReader = new BufferedReader(new FileReader("Patients.txt"));
-            BufferedWriter fileWritter = new BufferedWriter(new FileWriter("Patients.txt",true));
+            BufferedWriter fileWritter = new BufferedWriter(new FileWriter(tempFile,true));
             String line;
 
             while ((line = fileReader.readLine()) != null) {
@@ -25,11 +57,23 @@ public class FileManager {
                     //Writing new History while keeping the same old info.
                     fileWritter.write(lines[0]+','+lines[1]+','+newHistory+','+lines[3]+','+lines[4]+','+lines[5]+','+lines[6]);
                     fileWritter.newLine();
+                }else{
+                    fileWritter.write(lines[0]+','+lines[1]+','+lines[2]+','+lines[3]+','+lines[4]+','+lines[5]+','+lines[6]);
+                    fileWritter.newLine();
                 }
             }
 
-            fileWritter.close();
-            fileReader.close();
+            
+            fileWritter.close(); 
+            fileReader.close(); 
+            inputFile.delete();
+            
+            if(! tempFile.renameTo(new File("Patients.txt"))){
+                System.out.println("File rename error occured.");
+            }
+            tempFile.delete();
+
+            
 
         } catch (FileNotFoundException FileNotFoundException) {
                 System.out.println("Patients Not available");                
@@ -39,6 +83,29 @@ public class FileManager {
 
     }
 
+    //Function for displaying all patients for receptionist.
+    public static void printAllpatients(){
+        System.out.println("\nID \tName \tContect \tHistory \tDoctor ID \tBill \tCNIC");
+        try {
+            BufferedReader fileReader = new BufferedReader(new FileReader("Patients.txt"));
+            String line;
+
+            while ((line = fileReader.readLine()) != null) {
+
+                //Format of each Patient in file "ID,Name,History,Bill,CNIC,Phone Number,DoctorID "
+                String lines[] = line.split(",", 7);
+
+                System.out.println(lines[0]+"\t"+lines[1]+"\t"+lines[5]+"\t"+lines[2]+"\t"+lines[6]+"\t"+lines[3]+"\t"+lines[4]);
+            }
+
+            fileReader.close();
+
+        } catch (FileNotFoundException FileNotFoundException) {
+                System.out.println("Patients Not available");                
+        }catch (Exception e){
+            System.out.println("Error: "+e);
+        }
+    }
     //Function for displaying all patients of a given Doctor.
     public static void printAllpatients(int doctorID){
         System.out.println("\nID \tName \tContect \tHistory");
@@ -82,7 +149,6 @@ public class FileManager {
                 String passwordInFile = lines[1];
 
                 if(usernameInFile.equals(userID) && passwordInFile.equals(password)){
-                    System.out.println("Sending Verified from file manager");
                     readFile.close();
                     return true;
                 }
@@ -100,6 +166,7 @@ public class FileManager {
 
     //Find and Delete from txt
     static void find_and_delete(int IDtoRemove,String fileName){
+        boolean foundUser= false;
 
         try {
             File inputFile = new File(fileName);
@@ -116,7 +183,7 @@ public class FileManager {
 
                 String lines[] = line.split(",", 5);
                 if(IDtoRemove == Integer.parseInt(lines[0])){
-                    System.out.println("Found User");
+                    foundUser = true;
                     continue;
                 }else{
                     writer.write(line);
@@ -127,7 +194,6 @@ public class FileManager {
             
             writer.close(); 
             reader.close(); 
-            // inputFile.renameTo(new File("Oldfile.txt"));
             inputFile.delete();
             
             if(! tempFile.renameTo(new File(fileName))){
@@ -137,6 +203,11 @@ public class FileManager {
 
         } catch (Exception e) {
             System.out.println("Error Occured while Deleting User.");
+        }
+
+        if(foundUser) System.out.println("\n Found and delete User Succesfully.");
+        else{
+            System.out.println( "User not found.");
         }
         
 

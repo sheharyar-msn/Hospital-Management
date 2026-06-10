@@ -1,11 +1,69 @@
 package app.hospital_management.sheharyar;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
 
 public class admin {
+
+    //Function for Changing Login details of admin
+    private static void change_longin_info(Scanner sc, String username, String password){
+        boolean foundUser= false;
+
+        try {
+            File inputFile = new File("admin_details.txt");
+            File tempFile = new File("myTempFileAdmin.txt");
+
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile,true));
+
+            System.out.print("Enter New UserName: ");
+            String tempUserName = sc.next();
+            sc.nextLine();
+            System.out.print("Enter New Password: ");
+            String tempPassword = sc.next();
+            
+            String line;
+
+            while((line = reader.readLine()) != null) {
+                // trim newline when comparing with lineToRemove
+
+                String lines[] = line.split(",", 2);
+                if(username.equals(lines[0])){
+                    writer.write(tempUserName+","+tempPassword);
+                    foundUser = true;
+                    continue;
+                }else{
+                    writer.write(line);
+                    writer.newLine();
+                }
+                
+            }
+            
+            writer.close(); 
+            reader.close(); 
+            inputFile.delete();
+            
+            if(! tempFile.renameTo(new File("admin_details.txt"))){
+                System.out.println("File rename error occured.");
+            }
+            tempFile.delete();
+
+        } catch (Exception e) {
+            System.out.println("Error Occured while Deleting User.");
+        }
+
+        if(foundUser) System.out.println("\n Updated Succesfully");
+        else{
+            System.out.println( "Admin not found.");
+        }
+    }
 
     //function for deleting a receptionist
     private static void remove_receptionist(Scanner sc){
@@ -231,7 +289,7 @@ public class admin {
     }
     
     //Main manu for admin
-    private static void admin_main_manu(Scanner sc){
+    private static void admin_main_manu(Scanner sc, String userName, String password){
         int adminChoice =0;
         while (adminChoice!=4) {
             //Flushing \n stuck
@@ -254,6 +312,8 @@ public class admin {
                 case 2:
                     receptionist_management(sc);
                     continue;
+                case 3:
+                    change_longin_info(sc, userName, password);
                 default:
                     System.out.println("Invalid Choice");
                     continue;
@@ -285,7 +345,7 @@ public class admin {
                 System.out.println("Invalid Input");
             }
             if(FileManager.check_login_details_admin(username,password)){
-                admin_main_manu(sc);
+                admin_main_manu(sc,username,password);
                 loged_in = true;
                 return;
             }else{

@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class admin {
 
     //function for deleting a receptionist
-    static void remove_receptionist(Scanner sc){
+    private static void remove_receptionist(Scanner sc){
         int input=1;
 
         while(input !=0){
@@ -28,7 +28,7 @@ public class admin {
     }
 
     // Function for registering new Receptionist
-    static void add_Receptionist(Scanner sc){
+    private static void add_Receptionist(Scanner sc){
 
         Receptionist toAddReceptionist = new Receptionist();
         String temp;
@@ -85,7 +85,7 @@ public class admin {
     }
 
     //Menu for receptionist Management
-    public static void receptionist_management(Scanner sc){
+    private static void receptionist_management(Scanner sc){
         int adminChoice =0;
 
         while (adminChoice!=3) {
@@ -121,7 +121,7 @@ public class admin {
     }
 
     //Function for Deleting a Doctor
-    static void remove_doctors(Scanner sc){
+    private static void remove_doctors(Scanner sc){
         int input=1;
 
         while(input !=0){
@@ -141,7 +141,7 @@ public class admin {
     }
 
     //Function for Registering a new Doctor
-    static void add_doctor(Scanner sc){
+    private static void add_doctor(Scanner sc){
 
         Doctor toAddDocter = new Doctor();
         String temp;
@@ -195,7 +195,7 @@ public class admin {
     }
 
     //Docter management interface for admin
-    public static void doctor_management(Scanner sc){
+    private static void doctor_management(Scanner sc){
         int adminChoice =0;
 
         while (adminChoice!=3) {
@@ -231,7 +231,7 @@ public class admin {
     }
     
     //Main manu for admin
-    public static void admin_main_manu(Scanner sc){
+    private static void admin_main_manu(Scanner sc){
         int adminChoice =0;
         while (adminChoice!=4) {
             //Flushing \n stuck

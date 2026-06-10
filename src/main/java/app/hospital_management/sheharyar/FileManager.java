@@ -206,6 +206,7 @@ public class FileManager {
                 //Format of each doctor in file "ID,Passowrd,Name,CNIC,Phone Number"
                 writter.write("ID,Passowrd,Name,CNIC,Phone Number");
                 writter.newLine();
+                writter.close();
             }catch(Exception e){
                 System.out.println("Unable to create .txt file for Doctors");
                 return;

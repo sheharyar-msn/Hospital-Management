@@ -18,7 +18,7 @@ public class Doctor extends Person{
     }
 
     //His patients
-    static void doctor_main_manu(Scanner sc, int currDoctorId){
+    private static void doctor_main_manu(Scanner sc, int currDoctorId){
         int userInput =1;
         while (userInput!=0) {
             //Flushing \n stuck
